@@ -40,6 +40,31 @@ dataroom.get('/province_animalcount', function (req, res) {
   })
 })
 
+// 获取省级保护动物数量以及级别
+dataroom.get('/perprovinceanimalcount', function (req, res) {
+  const sql = `select * from animal_detail`
+  execSQL(sql).then(data => {
+    const result = {}
+    provinceData.forEach(item => {
+      result[item] = {
+        level1: 0,
+        level2: 0
+      }
+      data.forEach(item2 => {
+        // result[item] = String(item2.domestic_distribution).includes(item)
+        if (new RegExp(item).test(item2.domestic_distribution)) {
+          if (item2.protection_level == '一级') {
+            result[item].level1++
+          } else if (item2.protection_level == '二级') {
+            result[item].level2++
+          }
+        }
+      })
+    })
+    res.send({ data: result })
+  })
+})
+
 // 获取右侧手风琴列表
 dataroom.get('/order_desc/getalldesc', function (req, res) {
   const sql = 'SELECT * FROM order_desc'

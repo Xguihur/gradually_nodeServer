@@ -1,5 +1,44 @@
 const { execSQL } = require('../db/mysql')
 const dataroom = require('express').Router()
+const provinceData = ['北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆', '香港', '澳门', '台湾']
+
+// 获取动物等级
+dataroom.get('/level_animalcount', function (req, res) {
+  const sql = `select * from animal_detail`
+  execSQL(sql).then(data => {
+    const result = {
+      level1: 0,
+      level2: 0
+    }
+    data.forEach(item => {
+      if (item.protection_level == '一级') {
+        result.level1++
+      }
+      if (item.protection_level == '二级') {
+        result.level2++
+      }
+    })
+    res.send({ data: result })
+  })
+})
+
+// 获取省级保护动物数量
+dataroom.get('/province_animalcount', function (req, res) {
+  const sql = `select * from animal_detail`
+  execSQL(sql).then(data => {
+    const result = {}
+    provinceData.forEach(item => {
+      result[item] = 0
+      data.forEach(item2 => {
+        // result[item] = String(item2.domestic_distribution).includes(item)
+        if (new RegExp(item).test(item2.domestic_distribution)) {
+          result[item]++
+        }
+      })
+    })
+    res.send({ data: result })
+  })
+})
 
 // 获取右侧手风琴列表
 dataroom.get('/order_desc/getalldesc', function (req, res) {

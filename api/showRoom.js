@@ -90,7 +90,7 @@ showRoom.get('/animaltree', function (req, res) {
             let genus = []
             data.map(fifth => {
               if (fifth.animal_family === fourth.name) {
-                genus.push(fifth)
+                genus.push({ name: fifth.animal_name })
               }
             })
             fourth.children = genus

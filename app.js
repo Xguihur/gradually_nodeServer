@@ -8,9 +8,11 @@ app.use(cors())
 const animalRouter = require('./api/animal')
 const dataroomRouter = require('./api/dataroom')
 const directionRputer = require('./api/direction')
+const showRoomRouter = require('./api/showRoom')
 app.use(animalRouter)
 app.use(dataroomRouter)
 app.use(directionRputer)
+app.use(showRoomRouter)
 // app.use('/example',uploadRouter) // 像这样设置一个新的路由，就是指访问 /example 路径时，对应匹配后续导入的中间件中的路由
 
 const server = app.listen(3000, function () {
